@@ -1,0 +1,89 @@
+<!-- <div>
+    <select [(ngModel)]="selectedCategory">
+  <option [ngValue]="0">All</option>
+
+  @for (cat of categories; track cat.id) {
+    <option [ngValue]="cat.id">{{ cat.name }}</option>
+  }
+</select>
+  @for (course of filteredCourses; track course.id) {
+    <div class="course-card" [ngClass]="{ full: course.seats === 0 }" [style.background-color]="course.seats <= 2 ? '#fff3cd' : 'transparent'">
+      <img [src]="course.imgUrl" width="150" />
+      <h3>{{ course.title }}</h3>
+      <p>{{ course.instructor }}</p>
+      <p>{{ course.price }}</p>
+      <p>Seats: {{ course.seats }}</p>
+
+        @if (course.seats === 0) {
+        <p>Course Full</p>
+      }
+        @if (course.seats > 0 && course.seats <= 2) {
+        <p>Almost Full</p>
+      }
+
+      <button (click)="register(course)" [disabled]="course.seats === 0">
+        Register
+      </button>
+
+    </div>
+  }
+</div> -->
+<!-- https://getbootstrap.com/docs/5.3/components/card/#grid-cards -->
+<div class="container-fluid">
+  <p class="h3 text-center my-5">Total registered courses :{{ totalCourses }}</p>
+
+  <div class="form-floating w-50 m-auto my-3">
+    <select class="form-select" id="" [(ngModel)]="selectedCategoryID">
+      <option value="all" selected>All</option>
+      @for (category of categories; track category.id) {
+        <option [value]="category.id">{{ category.name }}</option>
+      }
+    </select>
+    <label for="">categories</label>
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-4 g-4">
+    @for (course of courses; track course.id) {
+      <!-- <div class="col" [class.d-none]="selectedCategoryID != 'all' && course.catId != selectedCategoryID"> -->
+      @if (selectedCategoryID === 'all' || course.catId == selectedCategoryID) {
+        <div class="col">
+          <div
+            class="card"
+            [class.text-danger]="course.seats === 0"
+            [style.backgroundColor]="course.seats <= 2 ? '#fff3cd' : ''"
+          >
+            <img
+              [src]="course.imgUrl"
+              class="card-img-top rounded img-fluid"
+              alt="{{ course.title }}"
+            />
+            <div class="card-body">
+              <h5 class="card-title">{{ course.title }}</h5>
+              <p class="card-text">instructor : {{ course.instructor }}</p>
+              <p class="card-text">seats :{{ course.seats }}</p>
+              <p>price : {{ course.price }}</p>
+              <p>price discount (10%): {{ course.price | discount }}</p>
+              <p>after discount (20%) :{{ course.price | discount: 20 }}</p>
+
+              @if (course.seats <= 2 && course.seats > 0) {
+                <p class="text-warning fw-bold">Almost Full</p>
+              } @else if (course.seats > 0) {
+              } @else {
+                <p class="fw-bold">Course Full</p>
+              }
+              <button
+                class="btn btn-primary"
+                appDisableAfterClick
+                (click)="register(course)"
+                [disabled]="course.seats === 0"
+                [disableWhen]="course.seats === 0"
+              >
+                Register
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>
