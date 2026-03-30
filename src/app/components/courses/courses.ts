@@ -5,9 +5,10 @@ import { ICategory } from '../../models/icategory';
 import { FormsModule } from '@angular/forms'; // search
 import { AppDisableAfterClick } from "../../directives/app-disable-after-click";
 import { DiscountPipe } from '../../pipes/discount-pipe';
+import { CurrencyPipe } from '@angular/common';
 @Component({
   selector: 'app-courses',
-  imports: [FormsModule, AppDisableAfterClick,DiscountPipe], //NgClass
+  imports: [FormsModule, AppDisableAfterClick,DiscountPipe,CurrencyPipe], //NgClass
   templateUrl: './courses.html',
   styleUrl: './courses.css',
 })

@@ -61,7 +61,7 @@
               <h5 class="card-title">{{ course.title }}</h5>
               <p class="card-text">instructor : {{ course.instructor }}</p>
               <p class="card-text">seats :{{ course.seats }}</p>
-              <p>price : {{ course.price }}</p>
+<p class="card-text">Price is : {{ course.price | currency :'EUR':'code' }}</p>
               <p>price discount (10%): {{ course.price | discount }}</p>
               <p>after discount (20%) :{{ course.price | discount: 20 }}</p>
 
