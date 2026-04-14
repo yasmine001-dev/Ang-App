@@ -1,0 +1,19 @@
+<ngb-carousel
+  #carousel
+  [interval]="2000"
+  [pauseOnHover]="pauseOnHover"
+  [pauseOnFocus]="pauseOnFocus"
+  (slide)="onSlide($event)"
+>
+  @for (img of images; track img; let i = $index) {
+    <ng-template ngbSlide>
+      <div class="picsum-img-wrapper">
+        <img [src]="img" alt="Slide {{ i + 1 }}" />
+      </div>
+
+      <div class="carousel-caption">
+        <h3>Slide {{ i + 1 }}</h3>
+      </div>
+    </ng-template>
+  }
+</ngb-carousel>

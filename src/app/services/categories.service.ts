@@ -1,17 +1,22 @@
 import { Injectable } from '@angular/core';
 import { ICategory } from '../models/icategory';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoriesService {
-  categories: ICategory[] = [
-    { id: 1, name: 'Academic ' }, // Math Science
-    { id: 2, name: 'Technology' }, //  Computer
-    { id: 3, name: 'Lifestyle' }, //  Cooking , art
-  ];
+  private apiUrl = `${environment.apiBaseUrl}/categories`;
 
-  getAllCategories(): ICategory[] {
-    return this.categories;
+  constructor(private http: HttpClient) {}
+
+  getAllCategories(): Observable<ICategory[]> {
+    return this.http.get<ICategory[]>(this.apiUrl);
+  }
+
+  getAllCateogories(): Observable<ICategory[]> {
+    return this.getAllCategories();
   }
 }

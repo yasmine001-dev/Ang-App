@@ -1,55 +1,65 @@
-import { Component } from '@angular/core';
-// import { NgClass } from '@angular/common';
-import { ICourse } from '../../models/icourse';
-import { ICategory } from '../../models/icategory';
-import { CoursesService } from '../../services/courses.service';
-import { CategoriesService } from '../../services/categories.service';
-import { FormsModule } from '@angular/forms'; // search
-import { AppDisableAfterClick } from "../../directives/app-disable-after-click";
-import { DiscountPipe } from '../../pipes/discount-pipe';
+import { Component, OnInit, inject } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
+import { ICategory } from '../../models/icategory';
+import { ICourse } from '../../models/icourse';
+import { CategoryService } from '../../services/category.service';
+import { CourseService } from '../../services/course.service';
+import { FormsModule } from '@angular/forms';
+import { CourseListComponent } from '../course-list/course-list';
+
 @Component({
   selector: 'app-courses',
-  imports: [FormsModule, AppDisableAfterClick,DiscountPipe,CurrencyPipe], //NgClass
+  standalone: true,
+  imports: [FormsModule, CurrencyPipe, CourseListComponent],
   templateUrl: './courses.html',
   styleUrl: './courses.css',
 })
-export class Courses {
-  totalCourses: number = 0; //Total registered courses
-  selectedCategoryID: string | number = 'all';
+export class CoursesComponent implements OnInit {
+  private readonly categoryService = inject(CategoryService);
+  private readonly courseService = inject(CourseService);
+
   courses: ICourse[] = [];
   categories: ICategory[] = [];
-  registeredCourses: ICourse[] = [];
+  selectedCatId = '0';
+  totalOrderPrice = 0;
+  isLoading = true;
+  lastRegisteredCourse = '';
 
-  constructor(
-    private coursesService: CoursesService,
-    private categoriesService: CategoriesService
-  ) {
-    this.courses = this.coursesService.getCoursesByCatID(0);
-    this.categories = this.categoriesService.getAllCategories();
+  ngOnInit(): void {
+    this.categoryService.getAllCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+      },
+      error: (error) => {
+        console.error('Failed to load categories', error);
+      },
+    });
+
+    this.courseService.getAllCourses().subscribe({
+      next: (courses) => {
+        this.courses = courses;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Failed to load courses', error);
+        this.isLoading = false;
+      },
+    });
   }
 
+  onTotalOrderPriceChange(totalOrderPrice: number): void {
+    this.totalOrderPrice = totalOrderPrice;
+  }
 
-  // get filteredCourses(): ICourse[] {
-  //   return this.selectedCategory === 0
-  //     ? this.courses
-  //     : this.courses.filter(course => course.catId === this.selectedCategory);
-  // }
-  //task004
-  register(course: ICourse) {
-    if (course.seats > 0) {
-      course.seats--;
-      this.totalCourses++;
-          this.registeredCourses.push(course); // to get total pricse
+  onCourseRegistered(courseTitle: string): void {
+    this.lastRegisteredCourse = courseTitle;
+  }
 
+  get selectedCategoryName(): string {
+    if (this.selectedCatId === '0') {
+      return 'All Categories';
     }
 
-//     if (!this.registeredCourses.find(c => c.id === course.id)) {
-//   this.registeredCourses.push(course);
-// }
+    return this.categories.find((category) => String(category.id) === this.selectedCatId)?.name ?? 'Selected Category';
   }
-
-get totalPrice(): number {
-  return this.registeredCourses.reduce((sum, c) => sum + c.price, 0);
-}
 }

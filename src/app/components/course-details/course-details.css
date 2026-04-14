@@ -1,0 +1,4 @@
+.course-image {
+  max-height: 420px;
+  object-fit: cover;
+}

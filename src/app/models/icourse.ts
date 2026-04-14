@@ -1,11 +1,9 @@
 export interface ICourse {
-  id: number;
+  id: string;
   title: string;
   instructor: string;
   price: number;
   seats: number;
   imgUrl: string;
-//   category:string;
-  catId: number;
-
+  catId: number | string;
 }

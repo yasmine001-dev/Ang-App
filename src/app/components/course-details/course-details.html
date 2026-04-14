@@ -1,0 +1,28 @@
+<section class="container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <div class="card shadow-sm border-0">
+        @if (loading) {
+          <div class="card-body">
+            <p class="mb-0">Loading course details...</p>
+          </div>
+        } @else if (course) {
+          <img [src]="course.imgUrl" class="card-img-top course-image" [alt]="course.title" />
+          <div class="card-body p-4">
+            <span class="badge text-bg-primary mb-3">Category {{ course.catId }}</span>
+            <h1 class="h3 mb-3">{{ course.title }}</h1>
+            <p class="text-body-secondary mb-2">Instructor: {{ course.instructor }}</p>
+            <p class="text-body-secondary mb-2">Available seats: {{ course.seats }}</p>
+            <p class="fs-4 fw-semibold mb-4">{{ course.price | currency }}</p>
+            <a routerLink="/courses" class="btn btn-outline-secondary">Back to Courses</a>
+          </div>
+        } @else {
+          <div class="card-body">
+            <p class="mb-3">Course not found.</p>
+            <a routerLink="/courses" class="btn btn-outline-secondary">Back to Courses</a>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>
